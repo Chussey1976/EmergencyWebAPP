@@ -7,19 +7,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const editNumber = document.getElementById('edit-number');
     const saveEditBtn = document.getElementById('save-edit');
     const cancelEditBtn = document.getElementById('cancel-edit');
-    const paginationContainer = document.getElementById('pagination');
+    const prevPageBtn = document.getElementById('prev-page');
+    const nextPageBtn = document.getElementById('next-page');
 
     let currentPage = 1;
     const contactsPerPage = 9;
 
     const commonContacts = [
-        { name: 'Plumber', icon: 'fa-wrench' },
+        { name: 'Emergency Dentist', icon: 'fa-tooth' },
         { name: 'Electrician', icon: 'fa-bolt' },
         { name: 'HVAC Technician', icon: 'fa-fan' },
         { name: 'Locksmith', icon: 'fa-key' },
         { name: 'Pest Control', icon: 'fa-bug' },
         { name: 'Towing Service', icon: 'fa-truck' },
-        { name: 'Emergency Dentist', icon: 'fa-tooth' },
+        { name: 'Plumber', icon: 'fa-wrench' },
         { name: '24/7 Veterinarian', icon: 'fa-paw' },
         { name: 'Handyman', icon: 'fa-tools' },
         { name: 'Mom', icon: 'fa-user' },
@@ -51,17 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updatePagination() {
         const pageCount = Math.ceil(commonContacts.length / contactsPerPage);
-        paginationContainer.innerHTML = '';
-
-        for (let i = 1; i <= pageCount; i++) {
-            const pageButton = document.createElement('button');
-            pageButton.textContent = i;
-            pageButton.addEventListener('click', () => {
-                currentPage = i;
-                loadNumbers();
-            });
-            paginationContainer.appendChild(pageButton);
-        }
+        prevPageBtn.disabled = currentPage === 1;
+        nextPageBtn.disabled = currentPage === pageCount;
     }
 
     function createContactButton(contact, number) {
@@ -180,6 +172,27 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('emergencyNumbers', JSON.stringify(numbers));
     }
 
+    function showDisclaimer() {
+        const disclaimerModal = document.createElement('div');
+        disclaimerModal.className = 'modal';
+        disclaimerModal.innerHTML = `
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Disclaimer</h2>
+                <p>This emergency contact app is provided as-is, without any warranties or guarantees. The developer is not responsible for any issues or damages that may arise from the use of this app. Use at your own risk.</p>
+                <p>By using this app, you agree to hold the developer harmless from any claims or liabilities.</p>
+            </div>
+        `;
+        document.body.appendChild(disclaimerModal);
+
+        const closeBtn = disclaimerModal.querySelector('.close');
+        closeBtn.addEventListener('click', () => {
+            document.body.removeChild(disclaimerModal);
+        });
+
+        disclaimerModal.style.display = 'block';
+    }
+
     addNewBtn.addEventListener('click', () => {
         openEditModal();
     });
@@ -188,27 +201,22 @@ document.addEventListener('DOMContentLoaded', () => {
         editModal.style.display = 'none';
     });
 
-    disclaimerBtn.addEventListener('click', () => {
-        showDisclaimer();
+    disclaimerBtn.addEventListener('click', showDisclaimer);
+
+    prevPageBtn.addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            loadNumbers();
+        }
     });
 
-    function showDisclaimer() {
-        const disclaimerModal = document.createElement('div');
-        disclaimerModal.className = 'modal';
-        disclaimerModal.innerHTML = `
-            <div class="modal-content">
-                <h2>Disclaimer</h2>
-                <p>This emergency contact app is provided as-is, without any warranties or guarantees. The developer is not responsible for any issues or damages that may arise from the use of this app. Use at your own risk.</p>
-                <p>By using this app, you agree to hold the developer harmless from any claims or liabilities.</p>
-                <button id="close-disclaimer">I Understand</button>
-            </div>
-        `;
-        document.body.appendChild(disclaimerModal);
-
-        document.getElementById('close-disclaimer').addEventListener('click', () => {
-            document.body.removeChild(disclaimerModal);
-        });
-    }
+    nextPageBtn.addEventListener('click', () => {
+        const pageCount = Math.ceil(commonContacts.length / contactsPerPage);
+        if (currentPage < pageCount) {
+            currentPage++;
+            loadNumbers();
+        }
+    });
 
     let longPressTimer;
     let isLongPress = false;

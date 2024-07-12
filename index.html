@@ -2,19 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Emergency Numbers</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" type="image/png" sizes="32x32" href="icon-192x192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="icon-192x192.png">    
+    <link rel="manifest" href="manifest.json">
 </head>
 <body>
     <div class="container">
         <button id="disclaimer-btn">Disclaimer</button>
-        <button id="add-new-btn">Add New Number</button>
-        <div id="common-numbers"></div> class="icon-grid"></div>
-        <div id="pagination"></div>
-        <div id="custom-numbers"></div>
+        <div class="control-row">
+            <button id="prev-page">&#8249;</button>
+            <button id="add-new-btn">Add New Number</button>
+            <button id="next-page">&#8250;</button>
+        </div>
+        <div id="common-numbers" class="icon-grid"></div>
     </div>
     <div id="edit-modal" class="modal">
         <div class="modal-content">
@@ -26,8 +30,5 @@
         </div>
     </div>
     <script src="script.js"></script>
-    <div id="icon-select" style="display: none;">
-        <!-- Add icon selection options here -->
-    </div>
 </body>
 </html>
