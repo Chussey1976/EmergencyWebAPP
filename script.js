@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const addNewBtn = document.getElementById('add-new-btn');
+    const scheduleAppointmentBtn = document.getElementById('schedule-appointment');
     const disclaimerBtn = document.getElementById('disclaimer-btn');
     const commonNumbers = document.getElementById('common-numbers');
     const editModal = document.getElementById('edit-modal');
@@ -15,21 +15,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const contactsPerPage = 9;
 
     const commonContacts = [
-        { name: 'Emergency Dentist', icon: 'fa-tooth' },
+        { name: 'Plumber', icon: 'fa-wrench' },
         { name: 'Electrician', icon: 'fa-bolt' },
         { name: 'HVAC Technician', icon: 'fa-fan' },
         { name: 'Locksmith', icon: 'fa-key' },
         { name: 'Pest Control', icon: 'fa-bug' },
         { name: 'Towing Service', icon: 'fa-truck' },
-        { name: 'Plumber', icon: 'fa-wrench' },
-        { name: '24/7 Veterinarian', icon: 'fa-paw' },
         { name: 'Handyman', icon: 'fa-tools' },
+        { name: '24/7 Veterinarian', icon: 'fa-paw' },
+        { name: 'Emergency Dentist', icon: 'fa-tooth' },
         { name: 'Mom', icon: 'fa-user' },
         { name: 'Dad', icon: 'fa-user' },
         { name: 'Spouse', icon: 'fa-heart' },
         { name: 'Barber/Hair Dresser', icon: 'fa-cut' },
         { name: 'Therapist', icon: 'fa-comments' },
-        { name: 'Massage Therapist', icon: 'fa-hands' }
+        { name: 'Massage Therapist', icon: 'fa-hands' },
+        { name: 'Roofing Contractor', icon: 'fa-home' },
+        { name: 'Auto Mechanic', icon: 'fa-car' },
+        { name: 'House Cleaning Service', icon: 'fa-broom' }
     ];
 
     function loadNumbers() {
@@ -233,8 +236,8 @@ document.addEventListener('DOMContentLoaded', () => {
         input.value = phoneNumber;
     }
 
-    addNewBtn.addEventListener('click', () => {
-        openEditModal();
+    scheduleAppointmentBtn.addEventListener('click', () => {
+        window.open('https://myagendas.link/RG-Calendar', '_blank');
     });
 
     cancelEditBtn.addEventListener('click', () => {
