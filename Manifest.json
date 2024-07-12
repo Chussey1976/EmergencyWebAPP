@@ -1,0 +1,21 @@
+{
+  "name": "Emergency Contact Numbers",
+  "short_name": "Emergency",
+  "description": "Quick access to your important contact numbers",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#a39f9c",
+  "theme_color": "#101e5a",
+  "icons": [
+    {
+      "src": "icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
