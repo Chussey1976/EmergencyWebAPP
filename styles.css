@@ -170,6 +170,11 @@ body, html {
         margin: 15px 0;
     }
 
+    #edit-modal input {
+        padding: 15px 15px; /* Ensure consistent left and right padding on mobile */
+        width: calc(100% - 30px); /* Adjust width to account for padding */
+    }
+    
     #edit-modal h2 {
         font-size: 24px;
         margin-top: 0;
