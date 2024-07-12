@@ -1,49 +1,74 @@
 document.addEventListener('DOMContentLoaded', () => {
     const addNewBtn = document.getElementById('add-new-btn');
+    const disclaimerBtn = document.getElementById('disclaimer-btn');
     const commonNumbers = document.getElementById('common-numbers');
     const editModal = document.getElementById('edit-modal');
     const editName = document.getElementById('edit-name');
     const editNumber = document.getElementById('edit-number');
     const saveEditBtn = document.getElementById('save-edit');
     const cancelEditBtn = document.getElementById('cancel-edit');
+    const paginationContainer = document.getElementById('pagination');
+
+    let currentPage = 1;
+    const contactsPerPage = 9;
 
     const commonContacts = [
-        { name: 'Dentist', icon: 'fa-tooth' },
         { name: 'Plumber', icon: 'fa-wrench' },
-        { name: 'Dad', icon: 'fa-user' },
+        { name: 'Electrician', icon: 'fa-bolt' },
+        { name: 'HVAC Technician', icon: 'fa-fan' },
+        { name: 'Locksmith', icon: 'fa-key' },
+        { name: 'Pest Control', icon: 'fa-bug' },
+        { name: 'Towing Service', icon: 'fa-truck' },
+        { name: 'Emergency Dentist', icon: 'fa-tooth' },
+        { name: '24/7 Veterinarian', icon: 'fa-paw' },
+        { name: 'Handyman', icon: 'fa-tools' },
         { name: 'Mom', icon: 'fa-user' },
-        { name: 'AAA', icon: 'fa-car' },
-        { name: 'Wife', icon: 'fa-heart' },
-        { name: 'Hair Dresser', icon: 'fa-scissors' },
-        { name: 'Massage Therapist', icon: 'fa-hands' },
-        { name: 'Therapist', icon: 'fa-comments' }
+        { name: 'Dad', icon: 'fa-user' },
+        { name: 'Spouse', icon: 'fa-heart' },
+        { name: 'Barber/Hair Dresser', icon: 'fa-cut' },
+        { name: 'Therapist', icon: 'fa-comments' },
+        { name: 'Massage Therapist', icon: 'fa-hands' }
     ];
 
     function loadNumbers() {
         const numbers = getSavedNumbers();
         displayAllNumbers(numbers);
+        updatePagination();
     }
 
     function displayAllNumbers(numbers) {
         commonNumbers.innerHTML = '';
         
-        commonContacts.forEach(contact => {
+        const startIndex = (currentPage - 1) * contactsPerPage;
+        const endIndex = startIndex + contactsPerPage;
+        const pageContacts = commonContacts.slice(startIndex, endIndex);
+
+        pageContacts.forEach(contact => {
             const number = numbers.find(n => n.name.toLowerCase() === contact.name.toLowerCase());
             createContactButton(contact, number);
         });
+    }
 
-        numbers.forEach(number => {
-            if (!commonContacts.some(contact => contact.name.toLowerCase() === number.name.toLowerCase())) {
-                createContactButton(number, number);
-            }
-        });
+    function updatePagination() {
+        const pageCount = Math.ceil(commonContacts.length / contactsPerPage);
+        paginationContainer.innerHTML = '';
+
+        for (let i = 1; i <= pageCount; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.textContent = i;
+            pageButton.addEventListener('click', () => {
+                currentPage = i;
+                loadNumbers();
+            });
+            paginationContainer.appendChild(pageButton);
+        }
     }
 
     function createContactButton(contact, number) {
         const button = document.createElement('button');
         button.className = `icon-btn ${number && number.number ? 'active' : 'inactive'}`;
         button.innerHTML = `
-            <i class="fas ${contact.icon || 'fa-user'}"></i>
+            <i class="fas ${contact.icon}"></i>
             <span>${contact.name}</span>
         `;
         button.addEventListener('click', (e) => {
@@ -116,7 +141,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (existingIndex !== -1) {
             if (newNumber === '') {
-                // Remove the contact if the number is empty
                 numbers.splice(existingIndex, 1);
             } else {
                 numbers[existingIndex] = { ...numbers[existingIndex], name: newName, number: newNumber };
@@ -163,6 +187,28 @@ document.addEventListener('DOMContentLoaded', () => {
     cancelEditBtn.addEventListener('click', () => {
         editModal.style.display = 'none';
     });
+
+    disclaimerBtn.addEventListener('click', () => {
+        showDisclaimer();
+    });
+
+    function showDisclaimer() {
+        const disclaimerModal = document.createElement('div');
+        disclaimerModal.className = 'modal';
+        disclaimerModal.innerHTML = `
+            <div class="modal-content">
+                <h2>Disclaimer</h2>
+                <p>This emergency contact app is provided as-is, without any warranties or guarantees. The developer is not responsible for any issues or damages that may arise from the use of this app. Use at your own risk.</p>
+                <p>By using this app, you agree to hold the developer harmless from any claims or liabilities.</p>
+                <button id="close-disclaimer">I Understand</button>
+            </div>
+        `;
+        document.body.appendChild(disclaimerModal);
+
+        document.getElementById('close-disclaimer').addEventListener('click', () => {
+            document.body.removeChild(disclaimerModal);
+        });
+    }
 
     let longPressTimer;
     let isLongPress = false;
