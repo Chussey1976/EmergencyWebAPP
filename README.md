@@ -1,9 +1,9 @@
-# EmergencyWebAPP
-Emergency Web App to store critical phone numbers for Dentist, Plumber, etc.
+# Emergencyapp
+Emergency App to store critical phone numbers for Dentist, Plumber, etc.
 
 Instructions for Users:
 
-"How to Install the Emergency Numbers Web App on Your Phone"
+"How to Install the Emergency Numbers App on Your Phone"
 
 For iPhone Users:
 1. Open Safari and go to emergencyapp.dentalconsultant.io
