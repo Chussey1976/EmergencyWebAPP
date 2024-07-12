@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const editName = document.getElementById('edit-name');
     const editNumber = document.getElementById('edit-number');
     const saveEditBtn = document.getElementById('save-edit');
+    const deleteContactBtn = document.getElementById('delete-contact');
     const cancelEditBtn = document.getElementById('cancel-edit');
     const prevPageBtn = document.getElementById('prev-page');
     const nextPageBtn = document.getElementById('next-page');
@@ -70,9 +71,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 openEditModal({ name: contact.name, number: '', icon: contact.icon });
             }
         });
-        button.addEventListener('mousedown', startLongPress);
-        button.addEventListener('mouseup', endLongPress);
-        button.addEventListener('mouseleave', endLongPress);
+        
+        // Double-click event for editing
+        button.addEventListener('dblclick', () => {
+            openEditModal(number || { name: contact.name, number: '', icon: contact.icon });
+        });
+        
         commonNumbers.appendChild(button);
     }
 
@@ -123,28 +127,42 @@ document.addEventListener('DOMContentLoaded', () => {
         editNumber.value = contact.number;
         editModal.style.display = 'block';
         saveEditBtn.onclick = () => saveEdit(contact);
+        deleteContactBtn.onclick = () => deleteContact(contact);
     }
 
     function saveEdit(contact) {
         const newName = editName.value.trim();
         const newNumber = editNumber.value.trim();
+        
+        // Validate phone number format if not blank
+        const phonePattern = /^$|^\(\d{3}\)\s\d{3}-\d{4}$/;
+        if (!phonePattern.test(newNumber)) {
+            alert("Please enter a valid phone number in the format (888) 888-8888 or leave it blank");
+            return;
+        }
+        
         const numbers = getSavedNumbers();
         const existingIndex = numbers.findIndex(n => n.name.toLowerCase() === contact.name.toLowerCase());
         
         if (existingIndex !== -1) {
-            if (newNumber === '') {
-                numbers.splice(existingIndex, 1);
-            } else {
-                numbers[existingIndex] = { ...numbers[existingIndex], name: newName, number: newNumber };
-            }
-        } else if (newNumber !== '') {
+            numbers[existingIndex] = { ...numbers[existingIndex], name: newName, number: newNumber };
+        } else {
             numbers.push({ name: newName, number: newNumber, icon: contact.icon || 'fa-user' });
         }
         
         saveNumbers(numbers);
         loadNumbers();
         editModal.style.display = 'none';
-        showConfirmation(`${newName} has been ${existingIndex !== -1 ? (newNumber === '' ? 'removed' : 'updated') : 'added'}.`);
+        showConfirmation(`${newName} has been ${existingIndex !== -1 ? 'updated' : 'added'}.`);
+    }
+
+    function deleteContact(contact) {
+        const numbers = getSavedNumbers();
+        const updatedNumbers = numbers.filter(n => n.name.toLowerCase() !== contact.name.toLowerCase());
+        saveNumbers(updatedNumbers);
+        loadNumbers();
+        editModal.style.display = 'none';
+        showConfirmation(`${contact.name} has been deleted.`);
     }
 
     function showConfirmation(message) {
@@ -193,6 +211,28 @@ document.addEventListener('DOMContentLoaded', () => {
         disclaimerModal.style.display = 'block';
     }
 
+    function formatPhoneNumber(input) {
+        // Strip all non-digit characters
+        let phoneNumber = input.value.replace(/\D/g, '');
+        
+        // Truncate if longer than 10 digits
+        phoneNumber = phoneNumber.substring(0, 10);
+        
+        // Format the number
+        if (phoneNumber.length > 0) {
+            if (phoneNumber.length < 4) {
+                phoneNumber = '(' + phoneNumber;
+            } else if (phoneNumber.length < 7) {
+                phoneNumber = '(' + phoneNumber.substring(0, 3) + ') ' + phoneNumber.substring(3);
+            } else {
+                phoneNumber = '(' + phoneNumber.substring(0, 3) + ') ' + phoneNumber.substring(3, 6) + '-' + phoneNumber.substring(6);
+            }
+        }
+        
+        // Update the input value
+        input.value = phoneNumber;
+    }
+
     addNewBtn.addEventListener('click', () => {
         openEditModal();
     });
@@ -218,23 +258,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    let longPressTimer;
-    let isLongPress = false;
-
-    function startLongPress(e) {
-        isLongPress = false;
-        longPressTimer = setTimeout(() => {
-            isLongPress = true;
-            const button = e.target.closest('.icon-btn');
-            const name = button.querySelector('span').textContent;
-            const number = getSavedNumbers().find(n => n.name.toLowerCase() === name.toLowerCase());
-            openEditModal(number || { name, number: '', icon: button.querySelector('i').className.split(' ')[1] });
-        }, 500);
-    }
-
-    function endLongPress() {
-        clearTimeout(longPressTimer);
-    }
+    editNumber.addEventListener('input', function() {
+        formatPhoneNumber(this);
+    });
 
     loadNumbers();
 });
