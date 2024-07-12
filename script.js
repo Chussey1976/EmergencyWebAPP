@@ -27,13 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function displayAllNumbers(numbers) {
         commonNumbers.innerHTML = '';
         
-        // Display common contacts
         commonContacts.forEach(contact => {
             const number = numbers.find(n => n.name.toLowerCase() === contact.name.toLowerCase());
             createContactButton(contact, number);
         });
 
-        // Display custom added numbers
         numbers.forEach(number => {
             if (!commonContacts.some(contact => contact.name.toLowerCase() === number.name.toLowerCase())) {
                 createContactButton(number, number);
@@ -43,13 +41,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function createContactButton(contact, number) {
         const button = document.createElement('button');
-        button.className = `icon-btn ${number ? 'active' : 'inactive'}`;
+        button.className = `icon-btn ${number && number.number ? 'active' : 'inactive'}`;
         button.innerHTML = `
             <i class="fas ${contact.icon || 'fa-user'}"></i>
             <span>${contact.name}</span>
         `;
         button.addEventListener('click', (e) => {
-            if (number) {
+            if (number && number.number) {
                 showNumberOptions(e, number);
             } else {
                 openEditModal({ name: contact.name, number: '', icon: contact.icon });
@@ -91,7 +89,6 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.removeChild(optionsDiv);
         });
 
-        // Close the options div when clicking outside
         document.addEventListener('click', function closeOptions(e) {
             if (!optionsDiv.contains(e.target) && e.target !== event.target) {
                 document.body.removeChild(optionsDiv);
@@ -112,21 +109,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function saveEdit(contact) {
-        const newName = editName.value;
-        const newNumber = editNumber.value;
+        const newName = editName.value.trim();
+        const newNumber = editNumber.value.trim();
         const numbers = getSavedNumbers();
         const existingIndex = numbers.findIndex(n => n.name.toLowerCase() === contact.name.toLowerCase());
         
         if (existingIndex !== -1) {
-            numbers[existingIndex] = { ...numbers[existingIndex], name: newName, number: newNumber };
-        } else {
+            if (newNumber === '') {
+                // Remove the contact if the number is empty
+                numbers.splice(existingIndex, 1);
+            } else {
+                numbers[existingIndex] = { ...numbers[existingIndex], name: newName, number: newNumber };
+            }
+        } else if (newNumber !== '') {
             numbers.push({ name: newName, number: newNumber, icon: contact.icon || 'fa-user' });
         }
         
         saveNumbers(numbers);
         loadNumbers();
         editModal.style.display = 'none';
-        showConfirmation(`${newName} has been ${existingIndex !== -1 ? 'updated' : 'added'}.`);
+        showConfirmation(`${newName} has been ${existingIndex !== -1 ? (newNumber === '' ? 'removed' : 'updated') : 'added'}.`);
     }
 
     function showConfirmation(message) {
