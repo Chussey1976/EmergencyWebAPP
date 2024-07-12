@@ -6,7 +6,7 @@ Instructions for Users:
 "How to Install the Emergency Numbers Web App on Your Phone"
 
 For iPhone Users:
-1. Open Safari and go to [Your GitHub Pages URL] (e.g., https://yourusername.github.io/emergency-numbers-app)
+1. Open Safari and go to emergencyapp.dentalconsultant.io
 2. Tap the Share button at the bottom of the screen (the square with an arrow pointing up)
 3. Scroll down and tap "Add to Home Screen"
 4. Give the app a name (e.g., "Emergency Numbers")
@@ -14,7 +14,7 @@ For iPhone Users:
 6. The app icon will now appear on your home screen
 
 For Android Users:
-1. Open Chrome and go to [Your GitHub Pages URL]
+1. Open Chrome and go to emergencyapp.dentalconsultant.io
 2. Tap the three-dot menu in the top right corner
 3. Tap "Add to Home screen"
 4. Give the app a name (e.g., "Emergency Numbers")
@@ -36,4 +36,4 @@ Troubleshooting:
 - If you don't see the "Add to Home Screen" option, make sure you're using the correct browser (Safari for iOS, Chrome for Android)
 - If the app doesn't work offline, ensure you have a stable internet connection for the first load to cache all necessary files
 
-For any issues or questions, please contact [Your Contact Information].
+For any issues or questions, please get in touch with DentalConsultants @ 866-260-4496.
